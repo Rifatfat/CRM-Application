@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('file_path');
             $table->string('document_type');
             $table->timestamp('uploaded_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
