@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Document extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'client_id',
         'contract_id',
@@ -14,6 +16,10 @@ class Document extends Model
         'file_path',
         'document_type',
         'uploaded_at'
+    ];
+
+    protected $casts = [
+        'uploaded_at' => 'datetime',
     ];
 
     public function client()
@@ -25,4 +31,13 @@ class Document extends Model
     {
         return $this->belongsTo(Contract::class);
     }
+     public function user()
+    {
+    return $this->belongsTo(User::class, 'uploaded_by');
+    }
+    public function uploader()
+    {
+        return $this->belongsTo(User::class, 'uploaded_by');
+    }
+    
 }
