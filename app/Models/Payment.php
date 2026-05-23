@@ -16,6 +16,13 @@ class Payment extends Model
         'status'
     ];
 
+    public function scopeOwnedBy($query, int $userId)
+    {
+        return $query->whereHas('contract.client', function ($clientQuery) use ($userId) {
+            $clientQuery->where('user_id', $userId);
+        });
+    }
+
     public function contract()
     {
         return $this->belongsTo(Contract::class);

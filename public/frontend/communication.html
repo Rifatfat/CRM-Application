@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication | CRM ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <section id="page-content">
+      <section class="grid grid-cols-1 gap-6 xl:grid-cols-[0.78fr_1fr]">
+        <div class="glass-card rounded-lg p-6">
+          <h2 class="text-base font-extrabold text-black">Add communication log</h2>
+          <form id="communication-form" class="mt-5 grid grid-cols-1 gap-4">
+            <div>
+              <label class="crm-label required" for="client_id">Client</label>
+              <select id="client_id" class="crm-input" name="client_id" required></select>
+            </div>
+            <div>
+              <label class="crm-label required" for="communication_type">Type</label>
+              <select id="communication_type" class="crm-input" name="communication_type" required>
+                <option value="meeting">Meeting</option>
+                <option value="call">Call</option>
+                <option value="email">Email</option>
+                <option value="follow-up">Follow-up</option>
+              </select>
+            </div>
+            <div>
+              <label class="crm-label required" for="communication_date">Date</label>
+              <input id="communication_date" class="crm-input" name="communication_date" type="date" required>
+            </div>
+            <div>
+              <label class="crm-label" for="notes">Notes</label>
+              <textarea id="notes" class="crm-input min-h-32" name="notes"></textarea>
+            </div>
+            <button class="btn-primary" type="submit">Save log</button>
+          </form>
+        </div>
+
+        <div class="rounded-lg border border-[#e7ecf2] bg-white">
+          <div class="flex items-center justify-between border-b border-[#e7ecf2] p-4">
+            <h2 class="text-base font-extrabold text-black">Communication Logs</h2>
+            <span id="communication-count" class="text-xs font-semibold text-[#8aa0b5]">0 logs</span>
+          </div>
+          <div class="overflow-x-auto crm-scrollbar">
+            <table class="crm-table">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Type</th>
+                  <th>Date</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="communication-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script type="module" src="js/communication.js"></script>
+  </body>
+</html>

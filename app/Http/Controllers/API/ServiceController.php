@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    // GET /api/services
-    public function index()
+    private function authorizeService(Service $service, Request $request): void
     {
-        $services = Service::latest()->get();
+        if ((int) $service->user_id !== (int) $request->user()->id) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    // GET /api/services
+    public function index(Request $request)
+    {
+        $services = Service::ownedBy((int) $request->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 'success',
@@ -20,8 +27,10 @@ class ServiceController extends Controller
     }
 
     // GET /api/services/{service}
-    public function show(Service $service)
+    public function show(Request $request, Service $service)
     {
+        $this->authorizeService($service, $request);
+
         return response()->json([
             'status' => 'success',
             'data' => $service
@@ -37,6 +46,8 @@ class ServiceController extends Controller
             'base_price'  => 'required|numeric|min:0',
         ]);
 
+        $data['user_id'] = $request->user()->id;
+
         $service = Service::create($data);
 
         return response()->json([
@@ -48,6 +59,15 @@ class ServiceController extends Controller
     // PUT /api/services/{service}
     public function update(Request $request, Service $service)
     {
+        $this->authorizeService($service, $request);
+
+        if ($service->contracts()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Service cannot be changed while contracts are using it.'
+            ], 409);
+        }
+
         $data = $request->validate([
             'name'        => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
@@ -63,8 +83,17 @@ class ServiceController extends Controller
     }
 
     // DELETE /api/services/{service}
-    public function destroy(Service $service)
+    public function destroy(Request $request, Service $service)
     {
+        $this->authorizeService($service, $request);
+
+        if ($service->contracts()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Service cannot be deleted while contracts are using it.'
+            ], 409);
+        }
+
         $service->delete();
 
         return response()->json([
@@ -74,13 +103,19 @@ class ServiceController extends Controller
     }
 
     // GET /api/services/{service}/contracts
-    public function contracts(Service $service)
+    public function contracts(Request $request, Service $service)
     {
-        $service->load('contracts');
+        $this->authorizeService($service, $request);
+
+        $contracts = $service->contracts()
+            ->with(['client', 'service'])
+            ->ownedBy((int) $request->user()->id)
+            ->latest()
+            ->get();
 
         return response()->json([
             'status' => 'success',
-            'data' => $service->contracts
+            'data' => $contracts
         ]);
     }
 }

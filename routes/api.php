@@ -158,111 +158,113 @@ use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\DocumentController;
 use App\Http\Controllers\API\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| CLIENT ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('clients')->group(function () {
-    Route::get('/', [ClientController::class, 'index']);
-    Route::post('/', [ClientController::class, 'store']);
-    Route::get('/{client}', [ClientController::class, 'show']);
-    Route::put('/{client}', [ClientController::class, 'update']);
-    Route::delete('/{client}', [ClientController::class, 'destroy']);
 
-    Route::get('/{client}/contacts', [ClientController::class, 'contacts']);
-    Route::get('/{client}/contracts', [ClientController::class, 'contracts']);
-    Route::get('/{client}/documents', [ClientController::class, 'documents']);
+Route::middleware('auth:sanctum')->group(function () {
+    /*
+    |--------------------------------------------------------------------------
+    | CLIENT ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('clients')->group(function () {
+        Route::get('/', [ClientController::class, 'index']);
+        Route::post('/', [ClientController::class, 'store']);
+        Route::get('/{client}', [ClientController::class, 'show']);
+        Route::put('/{client}', [ClientController::class, 'update']);
+        Route::delete('/{client}', [ClientController::class, 'destroy']);
+
+        Route::get('/{client}/contacts', [ClientController::class, 'contacts']);
+        Route::get('/{client}/contracts', [ClientController::class, 'contracts']);
+        Route::get('/{client}/documents', [ClientController::class, 'documents']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | SERVICE ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('services')->group(function () {
+        Route::get('/', [ServiceController::class, 'index']);
+        Route::post('/', [ServiceController::class, 'store']);
+        Route::get('/{service}', [ServiceController::class, 'show']);
+        Route::put('/{service}', [ServiceController::class, 'update']);
+        Route::delete('/{service}', [ServiceController::class, 'destroy']);
+
+        Route::get('/{service}/contracts', [ServiceController::class, 'contracts']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | CONTRACT ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('contracts')->group(function () {
+        Route::get('/', [ContractController::class, 'index']);
+        Route::post('/', [ContractController::class, 'store']);
+        Route::get('/{contract}', [ContractController::class, 'show']);
+        Route::put('/{contract}', [ContractController::class, 'update']);
+        Route::delete('/{contract}', [ContractController::class, 'destroy']);
+
+        Route::patch('/{contract}/status', [ContractController::class, 'updateStatus']);
+
+        Route::get('/{contract}/client', [ContractController::class, 'client']);
+        Route::get('/{contract}/service', [ContractController::class, 'service']);
+        Route::get('/{contract}/payments', [ContractController::class, 'payments']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | CONTACT ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('contacts')->group(function () {
+        Route::get('/', [ContactController::class, 'index']);
+        Route::get('/{contact}', [ContactController::class, 'show']);
+        Route::post('/', [ContactController::class, 'store']);
+        Route::put('/{contact}', [ContactController::class, 'update']);
+        Route::delete('/{contact}', [ContactController::class, 'destroy']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | PAYMENT ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('payments')->group(function () {
+        Route::get('/', [PaymentController::class, 'index']);
+        Route::get('/{payment}', [PaymentController::class, 'show']);
+        Route::post('/', [PaymentController::class, 'store']);
+        Route::delete('/{payment}', [PaymentController::class, 'destroy']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | DOCUMENT ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('documents')->group(function () {
+        Route::get('/', [DocumentController::class, 'index']);
+        Route::get('/{document}', [DocumentController::class, 'show']);
+        Route::post('/', [DocumentController::class, 'store']);
+        Route::delete('/{document}', [DocumentController::class, 'destroy']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMMUNICATION LOG ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('communication-logs')->group(function () {
+        Route::get('/', [CommunicationLogController::class, 'index']);
+        Route::post('/', [CommunicationLogController::class, 'store']);
+        Route::get('/{log}', [CommunicationLogController::class, 'show']);
+        Route::put('/{log}', [CommunicationLogController::class, 'update']);
+        Route::delete('/{log}', [CommunicationLogController::class, 'destroy']);
+    });
 });
-
-/*
-|--------------------------------------------------------------------------
-| SERVICE ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('services')->group(function () {
-    Route::get('/', [ServiceController::class, 'index']);
-    Route::post('/', [ServiceController::class, 'store']);
-    Route::get('/{service}', [ServiceController::class, 'show']);
-    Route::put('/{service}', [ServiceController::class, 'update']);
-    Route::delete('/{service}', [ServiceController::class, 'destroy']);
-
-    Route::get('/{service}/contracts', [ServiceController::class, 'contracts']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| CONTRACT ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('contracts')->group(function () {
-    Route::get('/', [ContractController::class, 'index']);
-    Route::post('/', [ContractController::class, 'store']);
-    Route::get('/{contract}', [ContractController::class, 'show']);
-    Route::put('/{contract}', [ContractController::class, 'update']);
-    Route::delete('/{contract}', [ContractController::class, 'destroy']);
-
-    Route::patch('/{contract}/status', [ContractController::class, 'updateStatus']);
-
-    Route::get('/{contract}/client', [ContractController::class, 'client']);
-    Route::get('/{contract}/service', [ContractController::class, 'service']);
-    Route::get('/{contract}/payments', [ContractController::class, 'payments']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| CONTACT ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('contacts')->group(function () {
-    Route::get('/', [ContactController::class, 'index']);
-    Route::get('/{contact}', [ContactController::class, 'show']);
-    Route::post('/', [ContactController::class, 'store']);
-    Route::put('/{contact}', [ContactController::class, 'update']);
-    Route::delete('/{contact}', [ContactController::class, 'destroy']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| PAYMENT ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('payments')->group(function () {
-    Route::get('/', [PaymentController::class, 'index']);
-    Route::get('/{payment}', [PaymentController::class, 'show']);
-    Route::post('/', [PaymentController::class, 'store']);
-    Route::delete('/{payment}', [PaymentController::class, 'destroy']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| DOCUMENT ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('documents')->group(function () {
-    Route::get('/', [DocumentController::class, 'index']);
-    Route::get('/{document}', [DocumentController::class, 'show']);
-    Route::post('/', [DocumentController::class, 'store']);
-    Route::delete('/{document}', [DocumentController::class, 'destroy']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| COMMUNICATION LOG ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::prefix('communication-logs')->group(function () {
-    Route::get('/', [CommunicationLogController::class, 'index']);
-    Route::post('/', [CommunicationLogController::class, 'store']);
-    Route::get('/{log}', [CommunicationLogController::class, 'show']);
-    Route::put('/{log}', [CommunicationLogController::class, 'update']);
-    Route::delete('/{log}', [CommunicationLogController::class, 'destroy']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| AUTH ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
+    /*
+    |--------------------------------------------------------------------------
+    | AUTH ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('/login', [UserController::class, 'login']);

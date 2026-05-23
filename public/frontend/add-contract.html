@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Deals | CRM ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <section id="page-content">
+      <div class="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_0.38fr]">
+        <form id="add-contract-form" class="grid grid-cols-1 gap-x-8 gap-y-7 lg:grid-cols-2">
+          <div>
+            <label class="crm-label required" for="service_id">Project Name</label>
+            <select id="service_id" class="crm-input" name="service_id" required></select>
+            <p id="service-hint" class="mt-2 text-xs font-semibold text-[#8aa0b5]"></p>
+          </div>
+          <div>
+            <label class="crm-label required" for="client_id">Client Name</label>
+            <select id="client_id" class="crm-input" name="client_id" required></select>
+          </div>
+          <div>
+            <label class="crm-label required" for="contract_value">Contract Value</label>
+            <input id="contract_value" class="crm-input" name="contract_value" type="number" min="0" step="1000" placeholder="Rp" required>
+          </div>
+          <div>
+            <label class="crm-label required" for="status">Status</label>
+            <select id="status" class="crm-input" name="status" required>
+              <option value="active">In Progress</option>
+              <option value="pending">Pending</option>
+              <option value="inactive">Completed</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+          <div>
+            <label class="crm-label required" for="start_date">Start Date</label>
+            <input id="start_date" class="crm-input" name="start_date" type="date" required>
+          </div>
+          <div>
+            <label class="crm-label required" for="end_date">Deadline</label>
+            <input id="end_date" class="crm-input" name="end_date" type="date" required>
+          </div>
+          <div class="lg:col-span-2">
+            <label class="crm-label" for="deal_notes">Notes <span class="text-[#8aa0b5]">(optional)</span></label>
+            <textarea id="deal_notes" class="crm-input min-h-[210px]" placeholder="Notes for the payments"></textarea>
+          </div>
+          <div class="lg:col-span-2 flex justify-end gap-4 pt-2">
+            <a class="btn-ghost min-w-28" href="contracts.html">Cancel</a>
+            <button class="btn-primary min-w-28" type="submit">Save</button>
+          </div>
+        </form>
+
+        <aside class="h-fit rounded-lg border border-[#e7ecf2] bg-white p-6">
+          <h2 class="text-base font-extrabold text-black">Create service</h2>
+          <form id="quick-service-form" class="mt-5 space-y-4">
+            <div>
+              <label class="crm-label required" for="name">Service name</label>
+              <input id="name" class="crm-input" name="name" type="text" placeholder="Digital Marketing" required>
+            </div>
+            <div>
+              <label class="crm-label required" for="base_price">Base price</label>
+              <input id="base_price" class="crm-input" name="base_price" type="number" min="0" step="1000" placeholder="Rp" required>
+            </div>
+            <div>
+              <label class="crm-label" for="description">Description</label>
+              <textarea id="description" class="crm-input min-h-28" name="description"></textarea>
+            </div>
+            <button class="btn-secondary w-full" type="submit">Add service</button>
+          </form>
+        </aside>
+      </div>
+    </section>
+    <script type="module" src="js/add-contract.js"></script>
+  </body>
+</html>

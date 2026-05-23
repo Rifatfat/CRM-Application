@@ -17,6 +17,13 @@ class Contract extends Model
         'status'
     ];
 
+    public function scopeOwnedBy($query, int $userId)
+    {
+        return $query->whereHas('client', function ($clientQuery) use ($userId) {
+            $clientQuery->where('user_id', $userId);
+        });
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);
@@ -37,8 +44,8 @@ class Contract extends Model
         return $this->hasMany(Document::class);
     }
 
-    public function communicationsLogs()
+    public function communicationLogs()
     {
-        return $this->hasMany(Communication::class);
+        return $this->hasMany(CommunicationLog::class);
     }
 }

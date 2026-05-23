@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Payment | CRM ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <section id="page-content">
+      <form id="add-payment-form" class="grid grid-cols-1 gap-x-8 gap-y-7 lg:grid-cols-2">
+        <div class="lg:col-span-2">
+          <label class="crm-label required" for="contract_id">Project Name</label>
+          <select id="contract_id" class="crm-input" name="contract_id" required></select>
+        </div>
+        <div>
+          <label class="crm-label required" for="amount">Amount</label>
+          <input id="amount" class="crm-input" name="amount" type="number" min="0" step="1000" placeholder="Rp" required>
+        </div>
+        <div>
+          <label class="crm-label required" for="payment_method">Payment Method</label>
+          <input id="payment_method" class="crm-input" name="payment_method" type="text" placeholder="Bank Transfer" required>
+        </div>
+        <div class="lg:col-span-2">
+          <label class="crm-label required" for="payment_date">Payment Date</label>
+          <input id="payment_date" class="crm-input" name="payment_date" type="date" required>
+        </div>
+        <div>
+          <label class="crm-label required" for="status">Status</label>
+          <select id="status" class="crm-input" name="status" required>
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+        <div class="lg:col-span-2">
+          <label class="crm-label" for="payment_notes">Notes <span class="text-[#8aa0b5]">(optional)</span></label>
+          <textarea id="payment_notes" class="crm-input min-h-[210px]" placeholder="Notes for the payments"></textarea>
+        </div>
+        <div class="lg:col-span-2 flex justify-end gap-4 pt-2">
+          <a class="btn-ghost min-w-28" href="payments.html">Cancel</a>
+          <button class="btn-primary min-w-28" type="submit">Save</button>
+        </div>
+      </form>
+    </section>
+    <script type="module" src="js/add-payment.js"></script>
+  </body>
+</html>

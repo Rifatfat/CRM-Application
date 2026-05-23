@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients | CRM ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <section id="page-content">
+      <section class="rounded-lg border border-[#e7ecf2] bg-white">
+        <div class="flex flex-col gap-4 border-b border-[#e7ecf2] p-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex min-h-10 flex-1 flex-col gap-3 md:flex-row md:items-center">
+            <label class="relative w-full md:max-w-sm">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#b5c0ca]">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" aria-hidden="true"><path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </span>
+              <input id="client-search" class="crm-input !min-h-10 !rounded-lg !border-[#e0e5ec] !pl-10" type="search" placeholder="Search client...">
+            </label>
+            <div class="flex flex-wrap gap-3">
+              <span class="filter-chip">All</span>
+              <span class="filter-chip">Active</span>
+              <span class="filter-chip">Inactive</span>
+              <span class="filter-chip">New</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 text-xs font-semibold text-[#8aa0b5]">
+            <span id="clients-total">Total: 0 Clients</span>
+            <span class="hidden h-8 w-px bg-[#e7ecf2] md:block"></span>
+            <span class="text-[#0d2a4c]">Sort by: Newest</span>
+            <button id="open-client-modal" class="btn-secondary !min-h-8 !px-3 !py-2" type="button">Quick add</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto crm-scrollbar">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Contact Person</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clients-body"></tbody>
+          </table>
+        </div>
+        <div class="flex items-center justify-between px-5 py-4 text-xs font-medium text-[#8aa0b5]">
+          <span id="clients-showing">Showing 0 Clients</span>
+          <div class="flex items-center gap-2 text-[#554cff]">
+            <span>&lt;</span><span class="rounded border border-[#e7ecf2] px-2 py-1 text-[#0d2a4c]">1</span><span>&gt;</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacts" class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[0.78fr_1fr]">
+        <div class="glass-card rounded-lg p-6">
+          <h2 id="contact-form-title" class="text-base font-extrabold text-black">Add client contact</h2>
+          <form id="contact-form" class="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-1">
+            <div>
+              <label class="crm-label required" for="contact_client_id">Client</label>
+              <select id="contact_client_id" class="crm-input" name="client_id" required></select>
+            </div>
+            <div>
+              <label class="crm-label required" for="contact_name">Name</label>
+              <input id="contact_name" class="crm-input" name="name" type="text" required>
+            </div>
+            <div>
+              <label class="crm-label" for="contact_position">Position</label>
+              <input id="contact_position" class="crm-input" name="position" type="text">
+            </div>
+            <div>
+              <label class="crm-label required" for="contact_email">Email</label>
+              <input id="contact_email" class="crm-input" name="email" type="email" required>
+            </div>
+            <div>
+              <label class="crm-label required" for="contact_phone">Phone</label>
+              <input id="contact_phone" class="crm-input" name="phone" type="text" required>
+            </div>
+            <div class="flex gap-3 md:col-span-2 xl:col-span-1">
+              <button id="cancel-contact-edit" class="btn-ghost hidden flex-1" type="button">Cancel</button>
+              <button id="contact-submit-button" class="btn-primary flex-1" type="submit">Save contact</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="glass-card rounded-lg p-6">
+          <h2 class="text-base font-extrabold text-black">Contact Directory</h2>
+          <div class="mt-4 overflow-x-auto crm-scrollbar">
+            <table class="crm-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Client</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="contacts-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <div id="client-modal" class="modal-backdrop hidden">
+        <div class="w-full max-w-2xl rounded-lg border border-[#e7ecf2] bg-white p-6 shadow-2xl">
+          <div class="mb-5 flex items-center justify-between">
+            <h2 id="client-modal-title" class="text-2xl font-extrabold text-black">Create client</h2>
+            <button id="close-client-modal" class="btn-ghost !min-h-8 !px-3" type="button">Close</button>
+          </div>
+          <form id="client-form" class="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <div>
+              <label class="crm-label required" for="company_name">Company name</label>
+              <input id="company_name" class="crm-input" name="company_name" type="text" required>
+            </div>
+            <div>
+              <label class="crm-label required" for="industry">Business info</label>
+              <input id="industry" class="crm-input" name="industry" type="text" required>
+            </div>
+            <div class="md:col-span-2">
+              <label class="crm-label required" for="address">Address</label>
+              <textarea id="address" class="crm-input min-h-24" name="address" required></textarea>
+            </div>
+            <div class="md:col-span-2">
+              <label class="crm-label" for="notes">Notes</label>
+              <textarea id="notes" class="crm-input min-h-32" name="notes"></textarea>
+            </div>
+            <div class="md:col-span-2 flex justify-end gap-3">
+              <button id="close-client-modal-secondary" class="btn-ghost" type="button">Cancel</button>
+              <button class="btn-primary" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="client-detail-modal" class="modal-backdrop hidden">
+        <div class="w-full max-w-2xl rounded-lg border border-[#e7ecf2] bg-white p-6 shadow-2xl">
+          <div class="mb-5 flex items-center justify-between">
+            <h2 class="text-2xl font-extrabold text-black">Client detail</h2>
+            <button id="close-client-detail" class="btn-ghost !min-h-8 !px-3" type="button">Close</button>
+          </div>
+          <div id="client-detail-content" class="grid grid-cols-1 gap-4 md:grid-cols-2"></div>
+        </div>
+      </div>
+    </section>
+    <script type="module" src="js/client.js"></script>
+  </body>
+</html>
