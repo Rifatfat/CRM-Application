@@ -21,6 +21,13 @@ class CommunicationLog extends Model
         'communication_date' => 'datetime',
     ];
 
+    public function scopeOwnedBy($query, int $userId)
+    {
+        return $query->whereHas('client', function ($clientQuery) use ($userId) {
+            $clientQuery->where('user_id', $userId);
+        });
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);

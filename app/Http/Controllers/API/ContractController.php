@@ -5,13 +5,24 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ContractController extends Controller
 {
-    // GET /api/contracts
-    public function index()
+    private function authorizeContract(Contract $contract, Request $request): void
     {
-        $contracts = Contract::with(['client', 'service'])->latest()->get();
+        if ((int) $contract->client?->user_id !== (int) $request->user()->id) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    // GET /api/contracts
+    public function index(Request $request)
+    {
+        $contracts = Contract::with(['client', 'service'])
+            ->ownedBy((int) $request->user()->id)
+            ->latest()
+            ->get();
 
         return response()->json([
             'status' => 'success',
@@ -20,9 +31,10 @@ class ContractController extends Controller
     }
 
     // GET /api/contracts/{contract}
-    public function show(Contract $contract)
+    public function show(Request $request, Contract $contract)
     {
         $contract->load(['client', 'service', 'payments', 'documents']);
+        $this->authorizeContract($contract, $request);
 
         return response()->json([
             'status' => 'success',
@@ -34,8 +46,14 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'client_id'      => 'required|exists:clients,id',
-            'service_id'     => 'required|exists:services,id',
+            'client_id'      => [
+                'required',
+                Rule::exists('clients', 'id')->where('user_id', $request->user()->id),
+            ],
+            'service_id'     => [
+                'required',
+                Rule::exists('services', 'id')->where('user_id', $request->user()->id),
+            ],
             'contract_value' => 'required|numeric|min:0',
             'start_date'     => 'required|date',
             'end_date'       => 'required|date|after:start_date',
@@ -53,9 +71,18 @@ class ContractController extends Controller
     // PUT /api/contracts/{contract}
     public function update(Request $request, Contract $contract)
     {
+        $contract->load('client');
+        $this->authorizeContract($contract, $request);
+
         $data = $request->validate([
-            'client_id'      => 'sometimes|exists:clients,id',
-            'service_id'     => 'sometimes|exists:services,id',
+            'client_id'      => [
+                'sometimes',
+                Rule::exists('clients', 'id')->where('user_id', $request->user()->id),
+            ],
+            'service_id'     => [
+                'sometimes',
+                Rule::exists('services', 'id')->where('user_id', $request->user()->id),
+            ],
             'contract_value' => 'sometimes|numeric|min:0',
             'start_date'     => 'sometimes|date',
             'end_date'       => 'sometimes|date|after:start_date',
@@ -71,8 +98,11 @@ class ContractController extends Controller
     }
 
     // DELETE /api/contracts/{contract}
-    public function destroy(Contract $contract)
+    public function destroy(Request $request, Contract $contract)
     {
+        $contract->load('client');
+        $this->authorizeContract($contract, $request);
+
         $contract->delete();
 
         return response()->json([
@@ -84,6 +114,9 @@ class ContractController extends Controller
     // PATCH /api/contracts/{contract}/status
     public function updateStatus(Request $request, Contract $contract)
     {
+        $contract->load('client');
+        $this->authorizeContract($contract, $request);
+
         $data = $request->validate([
             'status' => 'required|in:active,inactive,pending,expired',
         ]);
@@ -97,8 +130,11 @@ class ContractController extends Controller
     }
 
     // GET /api/contracts/{contract}/client
-    public function client(Contract $contract)
+    public function client(Request $request, Contract $contract)
     {
+        $contract->load('client');
+        $this->authorizeContract($contract, $request);
+
         return response()->json([
             'status' => 'success',
             'data' => $contract->client
@@ -106,8 +142,11 @@ class ContractController extends Controller
     }
 
     // GET /api/contracts/{contract}/service
-    public function service(Contract $contract)
+    public function service(Request $request, Contract $contract)
     {
+        $contract->load(['client', 'service']);
+        $this->authorizeContract($contract, $request);
+
         return response()->json([
             'status' => 'success',
             'data' => $contract->service
@@ -115,8 +154,11 @@ class ContractController extends Controller
     }
 
     // GET /api/contracts/{contract}/payments
-    public function payments(Contract $contract)
+    public function payments(Request $request, Contract $contract)
     {
+        $contract->load(['client', 'payments']);
+        $this->authorizeContract($contract, $request);
+
         return response()->json([
             'status' => 'success',
             'data' => $contract->payments

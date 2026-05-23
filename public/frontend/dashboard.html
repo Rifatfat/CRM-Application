@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CRM ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <section id="page-content">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <article class="metric-card p-5">
+          <div class="flex items-start justify-between gap-4">
+            <span class="icon-tile bg-[#554cff]">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6.8 1a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6ZM2.8 21c.2-4.1 2.9-7 6.2-7s6 2.9 6.2 7H2.8Zm12.8 0h5.6c-.18-3.2-2-5.45-4.55-5.9.68 1.18 1.08 2.58 1.15 4.1V21Z"/></svg>
+            </span>
+            <a class="filter-chip !border-0 !bg-[#eeecff] !px-4 !text-[11px] !text-[#554cff]" href="clients.html">See details</a>
+          </div>
+          <p class="mt-3 text-sm font-extrabold text-black">Customers</p>
+          <div class="mt-1 flex items-end justify-between">
+            <p class="text-[2.7rem] font-extrabold leading-none text-black" id="total-clients">0</p>
+            <p class="text-xs font-bold text-[#35b764]">+ New Customer</p>
+          </div>
+        </article>
+        <article class="metric-card p-5">
+          <div class="flex items-start justify-between gap-4">
+            <span class="icon-tile bg-[#35b764]">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" aria-hidden="true"><path d="M5 4h14v16H5V4Z" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            <a class="filter-chip !border-0 !bg-[#eeecff] !px-4 !text-[11px] !text-[#554cff]" href="contracts.html">See details</a>
+          </div>
+          <p class="mt-3 text-sm font-extrabold text-black">Projects</p>
+          <div class="mt-1 flex items-end justify-between">
+            <p class="text-[2.7rem] font-extrabold leading-none text-black" id="total-contracts">0</p>
+            <p class="text-xs font-bold text-[#35b764]">+ New Projects</p>
+          </div>
+        </article>
+        <article class="metric-card p-5">
+          <div class="flex items-start justify-between gap-4">
+            <span class="icon-tile bg-[#ff3747]">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" aria-hidden="true"><path d="M4 7h16v10H4V7Z" stroke="currentColor" stroke-width="2"/><path d="M8 12h.01M12 12h.01M16 12h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+            </span>
+            <a class="filter-chip !border-0 !bg-[#eeecff] !px-4 !text-[11px] !text-[#554cff]" href="payments.html">See details</a>
+          </div>
+          <p class="mt-3 text-sm font-extrabold text-black">Revenue</p>
+          <div class="mt-1 flex items-end justify-between">
+            <p class="text-3xl font-extrabold leading-none text-black" id="total-payments">Rp0</p>
+            <p class="text-xs font-bold text-[#35b764]">+ 15%</p>
+          </div>
+        </article>
+        <article class="metric-card p-5">
+          <div class="flex items-start justify-between gap-4">
+            <span class="icon-tile bg-[#ffb44c]">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" aria-hidden="true"><path d="M6 4h12v16H6V4Z" stroke="currentColor" stroke-width="2"/><path d="M9 8h6M9 16h6M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            <a class="filter-chip !border-0 !bg-[#eeecff] !px-4 !text-[11px] !text-[#554cff]" href="contracts.html">See details</a>
+          </div>
+          <p class="mt-3 text-sm font-extrabold text-black">Deals</p>
+          <div class="mt-1 flex items-end justify-between">
+            <p class="text-[2.7rem] font-extrabold leading-none text-black" id="active-contracts">0</p>
+            <p id="pending-contracts-label" class="text-xs font-bold text-[#ff3747]">0 Pending</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-[1.2fr_0.62fr]">
+        <section class="glass-card rounded-lg p-7">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wide text-[#8aa0b5]">Pipeline</p>
+              <h2 class="mt-1 text-base font-extrabold text-black">Recent Deals</h2>
+            </div>
+            <a class="filter-chip !bg-[#fbfcff]" href="contracts.html">Open deals</a>
+          </div>
+          <div id="dashboard-contracts-body" class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2"></div>
+        </section>
+
+        <section class="glass-card rounded-lg p-7">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wide text-[#8aa0b5]">Accounts</p>
+              <h2 class="mt-1 text-base font-extrabold text-black">Recent Customers</h2>
+            </div>
+            <a class="filter-chip !bg-[#fbfcff]" href="clients.html">Open clients</a>
+          </div>
+          <div id="recent-activity-body" class="mt-5 space-y-5"></div>
+        </section>
+      </div>
+
+      <section class="glass-card mt-8 rounded-lg p-5 sm:p-7">
+        <div class="flex flex-col gap-3 border-b border-[#e7ecf2] pb-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-[#8aa0b5]">Activity</p>
+            <h2 class="mt-1 text-base font-extrabold text-black">Communication Log</h2>
+          </div>
+          <a class="filter-chip !bg-[#fbfcff]" href="communication.html">View all logs</a>
+        </div>
+        <div id="dashboard-communication-body" class="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-2"></div>
+      </section>
+    </section>
+    <script type="module" src="js/dashboard.js"></script>
+  </body>
+</html>

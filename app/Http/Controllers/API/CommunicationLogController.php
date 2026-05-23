@@ -5,65 +5,125 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\CommunicationLog;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CommunicationLogController extends Controller
 {
-    // GET /api/communication-logs - Get all logs
-    public function index()
+    private function authorizeLog(CommunicationLog $log, Request $request): void
     {
-        $logs = CommunicationLog::all();
-        return response()->json($logs, 200);
+        if ((int) $log->client?->user_id !== (int) $request->user()->id) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    // GET /api/communication-logs - Get all logs
+    public function index(Request $request)
+    {
+        $logs = CommunicationLog::with(['client', 'user'])
+            ->ownedBy((int) $request->user()->id)
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $logs
+        ]);
     }
 
     // POST /api/communication-logs - Create new log
     public function store(Request $request)
     {
-        $request->validate([
-            'client_id'          => 'required|exists:clients,id',
-            'user_id'            => 'required|exists:users,id',
+        $data = $request->validate([
+            'client_id'          => [
+                'required',
+                Rule::exists('clients', 'id')->where('user_id', $request->user()->id),
+            ],
             'communication_type' => 'required|string|max:255',
             'notes'              => 'nullable|string',
             'communication_date' => 'required|date',
         ]);
 
-        $log = CommunicationLog::create($request->all());
-        return response()->json($log, 201);
+        $log = CommunicationLog::create([
+            ...$data,
+            'user_id' => $request->user()->id,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $log
+        ], 201);
     }
 
     // GET /api/communication-logs/{id} - Get one log
-    public function show($id)
+    public function show(Request $request, CommunicationLog $log)
     {
-        $log = CommunicationLog::findOrFail($id);
-        return response()->json($log, 200);
+        $log->load(['client', 'user']);
+        $this->authorizeLog($log, $request);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $log
+        ]);
     }
 
     // PUT /api/communication-logs/{id} - Update log
-    public function update(Request $request, $id)
+    public function update(Request $request, CommunicationLog $log)
     {
-        $log = CommunicationLog::findOrFail($id);
-        $log->update($request->all());
-        return response()->json($log, 200);
+        $log->load('client');
+        $this->authorizeLog($log, $request);
+
+        $data = $request->validate([
+            'client_id'          => [
+                'sometimes',
+                Rule::exists('clients', 'id')->where('user_id', $request->user()->id),
+            ],
+            'communication_type' => 'sometimes|required|string|max:255',
+            'notes'              => 'nullable|string',
+            'communication_date' => 'sometimes|required|date',
+        ]);
+
+        $log->update($data);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $log
+        ]);
     }
 
     // DELETE /api/communication-logs/{id} - Delete log
-    public function destroy($id)
+    public function destroy(Request $request, CommunicationLog $log)
     {
-        $log = CommunicationLog::findOrFail($id);
+        $log->load('client');
+        $this->authorizeLog($log, $request);
         $log->delete();
-        return response()->json(['message' => 'Communication log deleted successfully'], 200);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Communication log deleted successfully'
+        ]);
     }
 
     // GET /api/communication-logs/{id}/client
-    public function getClient($id)
+    public function getClient(Request $request, CommunicationLog $log)
     {
-        $log = CommunicationLog::findOrFail($id);
-        return response()->json($log->client, 200);
+        $log->load('client');
+        $this->authorizeLog($log, $request);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $log->client
+        ]);
     }
 
     // GET /api/communication-logs/{id}/user
-    public function getUser($id)
+    public function getUser(Request $request, CommunicationLog $log)
     {
-        $log = CommunicationLog::findOrFail($id);
-        return response()->json($log->user, 200);
+        $log->load(['client', 'user']);
+        $this->authorizeLog($log, $request);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $log->user
+        ]);
     }
 }

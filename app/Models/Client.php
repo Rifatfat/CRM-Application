@@ -10,6 +10,7 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'company_name',
         'industry',
         'address',
@@ -17,6 +18,10 @@ class Client extends Model
     ];
 
     // RELATIONSHIP
+    public function scopeOwnedBy($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
 
     public function contacts()
     {
@@ -36,5 +41,9 @@ class Client extends Model
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+    public function user()
+    {
+    return $this->belongsTo(User::class);
     }
 }

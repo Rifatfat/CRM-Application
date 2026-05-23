@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Client | CRM ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <section id="page-content">
+      <form id="add-client-form" class="grid grid-cols-1 gap-x-8 gap-y-7 lg:grid-cols-2">
+        <div>
+          <label class="crm-label required" for="company_name">Client Name</label>
+          <input id="company_name" class="crm-input" name="company_name" type="text" placeholder="Name" required>
+        </div>
+        <div>
+          <label class="crm-label required" for="industry">Business Info</label>
+          <input id="industry" class="crm-input" name="industry" type="text" placeholder="e.g. Banking, Technology" required>
+        </div>
+        <div class="lg:col-span-2">
+          <label class="crm-label required" for="address">Address</label>
+          <input id="address" class="crm-input" name="address" type="text" placeholder="Address" required>
+        </div>
+        <div class="lg:col-span-2">
+          <label class="crm-label" for="notes">Notes <span class="text-[#8aa0b5]">(optional)</span></label>
+          <textarea id="notes" class="crm-input min-h-[210px]" name="notes" placeholder="Notes for the customers"></textarea>
+        </div>
+        <div class="lg:col-span-2 flex justify-end gap-4 pt-2">
+          <a class="btn-ghost min-w-28" href="clients.html">Cancel</a>
+          <button class="btn-primary min-w-28" type="submit">Save</button>
+        </div>
+      </form>
+    </section>
+    <script type="module" src="js/add-client.js"></script>
+  </body>
+</html>

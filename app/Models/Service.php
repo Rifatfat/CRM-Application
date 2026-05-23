@@ -9,12 +9,19 @@ class Service extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'user_id',
         'name',
         'description',
         'base_price'
     ];
+
+    public function scopeOwnedBy($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
     public function contracts()
     {       
-    return $this->hasMany(Contract::class);
+        return $this->hasMany(Contract::class);
     }
 }
