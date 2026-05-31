@@ -64,7 +64,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'client'
+          app-name: 'cliently'
           slot-name: 'Production'
           package: .
           
