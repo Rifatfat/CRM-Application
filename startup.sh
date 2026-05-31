@@ -1,5 +1,3 @@
 #!/bin/sh
 
-cp /home/site/wwwroot/default /etc/nginx/sites-available/default
-
-service nginx reload
+php artisan serve --host=0.0.0.0 --port=8080
