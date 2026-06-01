@@ -21,7 +21,7 @@ const navItems = [
   ["communication", "Communication", "communication.html", icons.communication],
   ["documents", "Documents", "documents.html", icons.documents],
   ["payments", "Payments", "payments.html", icons.payments],
-  ["schedule", "Schedule", "schedule.html", icons.schedule],
+  
 ];
 
 const headerActions = {
@@ -104,10 +104,7 @@ export function renderLayout({ active = "dashboard", title = "Dashboard" } = {})
           </div>
           <div class="flex items-center gap-5">
             ${action ? `<a class="btn-primary hidden sm:inline-flex" href="${action[1]}">${action[0]} ${icons.plus}</a>` : ""}
-            <div class="relative text-[#8193a4]">
-              ${icons.bell}
-              <span class="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-[#ff717c] ring-2 ring-white"></span>
-            </div>
+            
             <div id="user-initials" class="grid h-12 w-12 place-items-center rounded-full bg-slate-100 text-base font-extrabold text-[#0d2a4c] ring-1 ring-[#e7ecf2]">U</div>
           </div>
         </div>
