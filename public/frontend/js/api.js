@@ -1,4 +1,4 @@
-export const baseURL = "http://127.0.0.1:8000/api";
+export const baseURL = "https://cliently-app-f8hrfrgfdqa6bvbw.southeastasia-01.azurewebsites.net/api";
 
 const defaultHeaders = {
   Accept: "application/json",
