@@ -1,4 +1,4 @@
-export const baseURL = "https://cliently-app-f8hrfrgfdqa6bvbw.southeastasia-01.azurewebsites.net/api";
+export const baseURL = "https://cliently-app-f8hrfrgfdqa6bvbw.southeastasia-01.azurewebsites.net/public/index.php/api";
 
 const defaultHeaders = {
   Accept: "application/json",
